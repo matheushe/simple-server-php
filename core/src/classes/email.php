@@ -19,22 +19,9 @@ class Email extends SMTP{
 		$this->Relay(SMTP_SERVER, SMTP_ACCOUNT,SMTP_PASS, SMTP_PORT, 'login', false);
 		$this->TimeOut(10);
 
-		if(isset($_SESSION['usr_filial'])){
+		$this->From(SMTP_ACCOUNT, SYSNAME);
 
-			if($_SESSION['usr_filial']=='WHB')
-				$this->From(SMTP_ACCOUNT, 'Portal - WHB');
-			elseif($_SESSION['usr_filial']=='ITE')
-				$this->From(SMTP_ACCOUNT, 'Portal - ITESAPAR');
-			elseif($_SESSION['usr_filial']=='TRO')
-				$this->From(SMTP_ACCOUNT, 'Portal - TROY');
-			elseif($_SESSION['usr_filial']=='ZAI')
-				$this->From(SMTP_ACCOUNT, 'Portal - ZAIRE');
-	
-		}else{
-			$this->From(SMTP_ACCOUNT, 'Portal');
-		}
-
-		$this->replyto('informatica@whbbrasil.com.br','Informatica');
+		$this->replyto(SISTEMA_PROPRIETARIO_EMAIL, SISTEMA_PROPRIETARIO_NOME);
 	}
 	
 	//Adiciona email no campo "Responder para" removendo os anteriores
@@ -45,7 +32,6 @@ class Email extends SMTP{
 	}
 
 	//Remover todos os "responder para"
-	//joaofr
 	public function DelReplyTo()
 	{
 		$this->delheader('Reply-To');
@@ -89,8 +75,8 @@ class Email extends SMTP{
 	public function from($adrr, $name = '')
 	{
 		//-- tratamento para email interno
-		if(strpos($adrr,"whb.interno")!==false) {
-			alert('Não é possível enviar e-mail de destinatário interno: '.$adrr,false);
+		if(strpos($adrr,".interno")!==false) {
+			alert('NÃ£o Ã© possÃ­vel enviar e-mail de destinatÃ¡rio interno: '.$adrr,false);
 			return;
 		}
 		parent::from($adrr,$name);
@@ -113,14 +99,14 @@ class Email extends SMTP{
 		$adrr = trim($adrr);
 
 		//-- tratamento para email interno
-		if(strpos($adrr,"whb.interno")!==false) {
-			alert('Não é possível enviar e-mail para destinatário interno: '.$adrr,false);
+		if(strpos($adrr,".interno")!==false) {
+			alert('NÃ£o Ã© possÃ­vel enviar e-mail para destinatÃ¡rio interno: '.$adrr,false);
 			$this->try_send_interno = true;
 			return;
 		}
 
 		//Valida para nao enviar email para contas externas quando em ambiente dev
-		if(!$pass && !IsProducao() && !(strpos(strtolower($adrr),"whb")>-1 || strpos(strtolower($adrr),"ite")>-1 || strpos(strtolower($adrr),"troy")>-1 || strpos(strtolower($adrr),"zai")>-1)) {
+		if(!$pass && !IsProducao()) {
 			echo 'AMBIENTE DEV: E-mail externo adicionado: '.$adrr . '<br>';
 			return;
 		}			
@@ -144,7 +130,7 @@ class Email extends SMTP{
 		else
 			$aTo = Permissao::getEmails($grp);
 
-		//adiona os destinatários de e-mail        
+		//adiona os destinatÃ¡rios de e-mail        
 		foreach($aTo as $a){
 			$this->addto($a);
 		}
@@ -153,7 +139,7 @@ class Email extends SMTP{
 
 	/**
 	 * Definir Prioridade no E-mail;
-	 * Caso seja Necessário Marcar o email como alta prioridade bata utilizar esta funcao.
+	 * Caso seja NecessÃ¡rio Marcar o email como alta prioridade bata utilizar esta funcao.
 	 * Exemplos:
 	 * defPrioridade()  -> Alta Prioridade
 	 * defPrioridade(3)  -> Prioridade Normal
@@ -170,7 +156,7 @@ class Email extends SMTP{
 
 	/**
 	 * Adicionar destinatario para receber copia do email;
-	 * Caso seja Necessário adicionar um detinatario para receber uma copia dos emails e suas respostas. (CC)
+	 * Caso seja NecessÃ¡rio adicionar um detinatario para receber uma copia dos emails e suas respostas. (CC)
 	 * Exemplos:
 	 * addCCopia('matheusha@whbbrasil.com.br','Matheus Henrique Rodrigues')
 	 * addCCopia(null,null, 'grupo') -> Conjunto de emails
@@ -202,7 +188,7 @@ class Email extends SMTP{
 
 	/**
 	 *  Adicionar destinatario para receber copia oculta do email;
-	 * Caso seja Necessário adicionar um detinatario para receber uma copia oculta - sem que os detinatarios saibam destes remetentes- dos emails e suas respostas. (CCO)
+	 * Caso seja NecessÃ¡rio adicionar um detinatario para receber uma copia oculta - sem que os detinatarios saibam destes remetentes- dos emails e suas respostas. (CCO)
 	 * Exemplos:
 	 * addCCOculta('matheusha@whbbrasil.com.br') -> UM UNICO EMAIL
 	 * addCCOculta(NULL, 'grupo') -> Conjunto de emails
@@ -235,7 +221,7 @@ class Email extends SMTP{
 
 	/** 
 	 * Solicita Confirmacao de Recebimento;
-	 * Caso seja Necessário solicitar a confirmacao de recebimento de um email
+	 * Caso seja NecessÃ¡rio solicitar a confirmacao de recebimento de um email
 	 * !!!! Aparentemente so funciona com alguns servicos de email !!!!
 	 * Exemplos:
 	 * slcRecebimento('matheusha@whbbrasil.com.br') -> UM UNICO EMAIL
@@ -260,7 +246,7 @@ class Email extends SMTP{
 
 	/** 
 	 * Solicita Confirmacao de leitura;
-	 * Caso seja Necessário solicitar a confirmacao de leitura de um email
+	 * Caso seja NecessÃ¡rio solicitar a confirmacao de leitura de um email
 	 * Exemplos:
 	 * slcLeitura('matheusha@whbbrasil.com.br') -> UM UNICO EMAIL
 	 * slcLeitura(NULL, 'grupo') -> Conjunto de emails
@@ -292,7 +278,7 @@ class Email extends SMTP{
 			}				
 
 			//-- se nao adicionou nenhum e-mail 
-			//-- e também não foi tentativa de envio para e-mail interno
+			//-- e tambÃ©m nÃ£o foi tentativa de envio para e-mail interno
 			//-- pode ser falta de tratamento no fonte por parte do analista
 			elseif(!$this->try_send_interno){
 			
@@ -310,7 +296,7 @@ class Email extends SMTP{
 								 'assunto:  '.$assunto.'<br>'.
 								 'contexto: '.print_r($this,true));
 						 
-				$e->send('*** EMAIL ENVIADO SEM DESTINATARIO VIA PORTAL ***');
+				$e->send('*** EMAIL ENVIADO SEM DESTINATARIO VIA ' . SYSNAME. ' ***');
 			}
 		}catch(Exception $e){
 			throw new Exception($e->getMessage());
@@ -319,7 +305,7 @@ class Email extends SMTP{
 
     /**
      * Adciona um arquivo no email como anexo
-     * as demais chamadas são iguais da classe Email
+     * as demais chamadas sÃ£o iguais da classe Email
      * $pathFile - passar o caminho do arquivo
      * $nameFile - nome do arquivo que vai sair no e-email
      * $type = tipo do arquivo
@@ -331,21 +317,21 @@ class Email extends SMTP{
 	
 
 	/**
-	 * Verifica se está no ambiente dev e adciona uma mensagem que 
-	 * o e-mail foi enviado do portal desenvolvimento
+	 * Verifica se estÃ¡ no ambiente dev e adciona uma mensagem que 
+	 * o e-mail foi enviado do ambiente desenvolvimento
 	 */
 	private function isDev()
 	{
 		if (!isProducao()) {
 			// $html = $this->_ahtml[2]; // recupera o corpo do email
-			$html = "<span style='background-color: #FFEB3B; color: black;'>ATENÇÃO! EMAIL ENVIADO ATRAVÉS DO AMBIENTE DE TESTES DA INFORMÁTICA. FAVOR DESCONSIDERAR! </span> <br>" . $this->_ahtml[2]; // concatena a mensagem
+			$html = "<span style='background-color: #FFEB3B; color: black;'>ATENÃ‡ÃƒO! EMAIL ENVIADO ATRAVÃ‰S DO AMBIENTE DE DESENVOLVIMENTO. FAVOR DESCONSIDERAR! </span> <br>" . $this->_ahtml[2]; // concatena a mensagem
 			self::html($html); // inclui novamente o corpo de email
 		}
 	}
 
 	/**
 	 * public function sendEmailSimples($assunto, $msg, $destinatario)
-	 * Função para envio de simples emails de informacoes
+	 * FunÃ§Ã£o para envio de simples emails de informacoes
 	 * Pode ser utilizado para enviar um simples contador ou algum dado simplorio
 	 * !!! Nao utilizar para rotinas muito elaboradas, foi pensada para envios simples !!!
 	 * Exemplo de uso:

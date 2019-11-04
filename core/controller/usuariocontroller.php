@@ -13,12 +13,6 @@ class usuariocontroller extends controller{
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST');
         header('Access-Control-Allow-Headers: Content-Type');
-        if(isset($_GET['emp']))
-            $_SESSION['usr_filial'] = $_GET['emp'];
-        else{
-            arrToJson(['erro'=> true, 'msg' => 'empresa vazia']);
-            die;
-        }
     }
 
     public function autenticaUser()
@@ -49,7 +43,6 @@ class usuariocontroller extends controller{
 
     private function authBD($user, $senha)
     {
-        // ver($senha);
         $sql = "SELECT id, str_nome, str_login, str_setor, str_email, str_auditor, str_empresa  FROM tbl_user WHERE str_login = '$user' and str_senha = '" . md5($senha) . "'";
 
         $usuario = new tbl_user;
@@ -58,7 +51,7 @@ class usuariocontroller extends controller{
 
         //Se nao tiver uma foto, retorna uma padrao.
         // if(empty($usr['blb_foto']))
-        $usr['blb_foto'] = file_get_contents('app/view/img/icons/foto.png');
+        $usr['blb_foto'] = file_get_contents(IMGCORE.'icons/foto.png');
 
         return $usr;
     }

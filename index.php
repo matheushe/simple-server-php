@@ -6,26 +6,26 @@
 	// header('Access-Control-Allow-Methods: GET, POST');
 	// header("Access-Control-Allow-Headers: X-Requested-With");
 
-	//-- inclui a biblioteca portal.php (cont�m as fun��es b�sicas do sistema)
+	//-- inclui a biblioteca portal.php (contém as funções básicas do sistema)
 	require_once 'config/defines.php';
 
 	require_once 'lib/vendor/autoload.php';
 
-	require_once 'app/src/portal.php';
+	require_once 'core/src/portal.php';
 
-	// verifica se foi informado par�metro para a p�gina,
-	// sen�o assume a p�gina indexcontroller
+	// verifica se foi informado parâmetro para a página,
+	// senão assume a página indexcontroller
 	$pagina = isset($_GET['p']) ? $_GET['p'] : 'index';
 
-	// verifica se foi informado par�metro para o m�todo,
-	// sen�o assume o m�todo index. Este m�todo deve estar definido na classe (p�gina)Controller
+	// verifica se foi informado parâmetro para o método,
+	// senão assume o método index. Este método deve estar definido na classe (página)Controller
 	$metodo = isset($_GET['op']) ? $_GET['op'] : 'index';
 
 	// variavel auxiliar para compor o nome da classe controller
 	$controller  = ucfirst(strtolower($pagina)).'Controller';
 
-	// instancia um objeto do tipo (p�gina)Controller
+	// instancia um objeto do tipo (página)Controller
 	$objpage = new $controller;
 
-	//-- chama o m�todo da classe utilizando a fun��o eval
+	//-- chama o método da classe utilizando a função eval
 	eval('$objpage->'.$metodo.'();');

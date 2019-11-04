@@ -50,8 +50,8 @@ CREATE TABLE IF NOT EXISTS `sys005` (
 -- Copiando dados para a tabela db_controller.sys005: 2 rows
 /*!40000 ALTER TABLE `sys005` DISABLE KEYS */;
 INSERT INTO `sys005` (`str_filial`, `id`, `str_nome`, `str_desc`, `str_retconsulta`, `str_filconsulta`, `str_formfiles`, `str_chavconsulta`, `str_expxls`, `str_checkable`, `str_db`, `str_modo`, `str_inclui`, `str_altera`, `str_visual`, `str_exclui`, `str_camposys`, `str_revisa`, `str_duplic`, `str_view`, `str_sqlview`, `str_bkpuni`) VALUES
-	('', 1, 'sys005', 'Cadastro de Tabelas do Sistema', 'str_nome', '', 'N', 'str_nome', 'S', 'N', 'portal', 'C', 'S', 'S', 'S', 'S', 'S', 'N', NULL, NULL, '', 'S'),
-	('', 2, 'sys008', 'Classes do Sistema', '', '', 'N', '', 'S', 'N', 'portal', 'C', 'S', 'S', 'S', 'S', 'S', NULL, NULL, NULL, '', 'S');
+	('', 1, 'sys005', 'Cadastro de Tabelas do Sistema', 'str_nome', '', 'N', 'str_nome', 'S', 'N', 'controller', 'C', 'S', 'S', 'S', 'S', 'S', 'N', NULL, NULL, '', 'S'),
+	('', 2, 'sys008', 'Classes do Sistema', '', '', 'N', '', 'S', 'N', 'controller', 'C', 'S', 'S', 'S', 'S', 'S', NULL, NULL, NULL, '', 'S');
 /*!40000 ALTER TABLE `sys005` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela db_controller.sys008

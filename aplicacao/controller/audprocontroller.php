@@ -22,6 +22,8 @@ class audproController extends controller{
     public function index()
     {
         echo 'Não a nada aqui pra voce';
+        $s = new sys005;
+        ver($s->getall('*'));
     }
 
     /**

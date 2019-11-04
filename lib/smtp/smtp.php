@@ -1413,9 +1413,7 @@ class SMTP extends MIME {
 								$success = $this->_sendtohost('127.0.0.1', $alldom, false);
 							}elseif($conntype == "relay"){
 								if($this->_relay) $success = $this->_sendtohost($this->_relay['ip'], $alldom, true);
-								
-//								if(isset($_SESSION['usr_login']) && $_SESSION['usr_login']=='joaofr')
-//									ver($success);
+
 								else trigger_error('You must set relay options with function "Relay()" in order to use relay connection, on class SMTP::send()', 512);
 							}elseif($conntype == "client"){
 								$back1 = $back2 = true;

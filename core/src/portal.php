@@ -2,14 +2,14 @@
 
 /**
  * funcao autoload
- * funcao m�gica do php para carregar classes automaticamente
+ * funcao mágica do php para carregar classes automaticamente
  * mais informacoes: http://php.net/manual/en/language.oop5.autoload.php
  */
 
 spl_autoload_register(function($className) { 
 
 	if(strtolower($className)=='email'){
-		require_once 'app/src/classes/email.php';
+		require_once 'core/src/classes/email.php';
 		return;
 	}
 
@@ -30,26 +30,21 @@ spl_autoload_register(function($className) {
 		}
 	}
 	
-	if(autoload_search('app'.DS.'src'.DS.'classes',$className))
+	if(autoload_search('core'.DS.'src'.DS.'classes',$className))
 		return;
-	// if(autoload_search('app'.DS.'src'.DS.'traits',$className))
-	// 	return;
-	// if(autoload_search('app'.DS.'src'.DS.'interfaces',$className))
-	// 	return;
 
 	//-- se nao conseguir instanciar
 	$m = new Model();
 	$m->tabela = 'sys008';
 	$extend = $m->getone("str_extend","str_nome = '$className'");
 
-	//-- compatibilidade portal 2
 	$extend = explode("\\",$extend);
 	$extend = array_pop($extend);
 
 	$m->__destruct();
 
 	if(!empty($extend)){
-		//-- cria uma classe dinamicamente sem conte�do
+		//-- cria uma classe dinamicamente sem conteúdo
 		eval('class '.ucfirst(strtolower($className)).' extends '.ucfirst(strtolower($extend)).'{}');
 
 	}else
@@ -70,7 +65,7 @@ function autoload_search($fld,$arq)
 }
 
 /**
- * Funcao utilizada para debugar vari�veis na execu��o dos scripts php
+ * Funcao utilizada para debugar variáveis na execução dos scripts php
  */
 function ver($var,$exit=true)
 {
@@ -87,7 +82,7 @@ function ver($var,$exit=true)
 }
 
 /**
- * Trata os textos para n�o permitir inser��o de c�digos 
+ * Trata os textos para não permitir inserção de códigos 
  */
 function sanitizar($str,$mysql=true)
 {
@@ -160,7 +155,7 @@ function ctomsd($data)
 //-- Passa data de "AAAAMMDD" para "DD/MM/AAAA"
 function msdtoc($data)
 {
-	//recebe o par�metro e armazena em um array separado por -
+	//recebe o parâmetro e armazena em um array separado por -
 	return substr($data,6,2).'/'.substr($data,4,2).'/'.substr($data,0,4);
 }
 
@@ -196,8 +191,8 @@ function year2digits($data)
 
 /* Retorna o trimestre do mes informado
 *	retornaTrimeste(2) => 1
-*	retornaTrimeste(2, true) => 1� Trimestre
-*	retornaTrimeste(2, true, 3) => 1� Trim
+*	retornaTrimeste(2, true) => 1º Trimestre
+*	retornaTrimeste(2, true, 3) => 1º Trim
 * Matheus Henrique 18/02/2019
 */
 function retornaTrimeste($mes, $formatado = false, $letras = false)
@@ -213,10 +208,10 @@ function retornaTrimeste($mes, $formatado = false, $letras = false)
 		$tri = 4;
 	}
 	if($formatado && !$letras)
-		return $tri . '� Trimestre';
+		return $tri . 'º Trimestre';
 
 	if($letras)
-		return $tri . '� ' . substr('Trimestre', 0, $letras);
+		return $tri . 'º ' . substr('Trimestre', 0, $letras);
 
 	return $tri;
 }
@@ -241,7 +236,7 @@ function daysHolidays($ano = null, $isDay = true, $dtoc = false)
 		$ano = intval(date('Y'));
 	
 	// Calcular datas com base na Pascoa
-	$pascoa     = easter_date($ano);	// Limite de 1970 ou ap�s 2037 da easter_date PHP consulta http://www.php.net/manual/pt_BR/function.easter-date.php
+	$pascoa     = easter_date($ano);	// Limite de 1970 ou após 2037 da easter_date PHP consulta http://www.php.net/manual/pt_BR/function.easter-date.php
     $dia_pascoa = date('j', $pascoa);	// Dia da pascoa para a data informada
     $mes_pascoa = date('n', $pascoa);	// Mes da pascoa para a data informada
 	$ano_pascoa = date('Y', $pascoa);	// Ano da pascoa apenas para padronizacao
@@ -251,19 +246,19 @@ function daysHolidays($ano = null, $isDay = true, $dtoc = false)
 		// 					Mes, Dia, $ano
 
 		// Datas Fixas dos feriados Nacionais Basileiros
-        mktime(0, 0, 0, 1,  1,   $ano), // Confraterniza��o Universal - Lei n� 662, de 06/04/49
-        mktime(0, 0, 0, 4,  21,  $ano), // Tiradentes - Lei n� 662, de 06/04/49
-        mktime(0, 0, 0, 5,  1,   $ano), // Dia do Trabalhador - Lei n� 662, de 06/04/49
-        mktime(0, 0, 0, 9,  7,   $ano), // Dia da Independ�ncia - Lei n� 662, de 06/04/49
-        mktime(0, 0, 0, 10,  12, $ano), // N. S. Aparecida - Lei n� 6802, de 30/06/80
-        mktime(0, 0, 0, 11,  2,  $ano), // Todos os santos - Lei n� 662, de 06/04/49
-        mktime(0, 0, 0, 11, 15,  $ano), // Proclama��o da republica - Lei n� 662, de 06/04/49
-		mktime(0, 0, 0, 12, 25,  $ano), // Natal - Lei n� 662, de 06/04/49
+        mktime(0, 0, 0, 1,  1,   $ano), // Confraternização Universal - Lei nº 662, de 06/04/49
+        mktime(0, 0, 0, 4,  21,  $ano), // Tiradentes - Lei nº 662, de 06/04/49
+        mktime(0, 0, 0, 5,  1,   $ano), // Dia do Trabalhador - Lei nº 662, de 06/04/49
+        mktime(0, 0, 0, 9,  7,   $ano), // Dia da Independºncia - Lei nº 662, de 06/04/49
+        mktime(0, 0, 0, 10,  12, $ano), // N. S. Aparecida - Lei nº 6802, de 30/06/80
+        mktime(0, 0, 0, 11,  2,  $ano), // Todos os santos - Lei nº 662, de 06/04/49
+        mktime(0, 0, 0, 11, 15,  $ano), // Proclamação da republica - Lei nº 662, de 06/04/49
+		mktime(0, 0, 0, 12, 25,  $ano), // Natal - Lei nº 662, de 06/04/49
 		
         // Calculo de feriados que se baseam no dia da pascoa
-        mktime(0, 0, 0, $mes_pascoa, $dia_pascoa - 48,  $ano_pascoa),// 2�feria Carnaval
-        mktime(0, 0, 0, $mes_pascoa, $dia_pascoa - 47,  $ano_pascoa),// 3�feria Carnaval 
-        mktime(0, 0, 0, $mes_pascoa, $dia_pascoa - 2 ,  $ano_pascoa),// 6�feira Santa  
+        mktime(0, 0, 0, $mes_pascoa, $dia_pascoa - 48,  $ano_pascoa),// 2ºferia Carnaval
+        mktime(0, 0, 0, $mes_pascoa, $dia_pascoa - 47,  $ano_pascoa),// 3ºferia Carnaval 
+        mktime(0, 0, 0, $mes_pascoa, $dia_pascoa - 2 ,  $ano_pascoa),// 6ºfeira Santa  
         mktime(0, 0, 0, $mes_pascoa, $dia_pascoa     ,  $ano_pascoa),// Pascoa
         mktime(0, 0, 0, $mes_pascoa, $dia_pascoa + 60,  $ano_pascoa),// Corpus Cirist
 	);
@@ -275,7 +270,7 @@ function daysHolidays($ano = null, $isDay = true, $dtoc = false)
 	for ($x=0;$x<sizeof($feriados);$x++)
 			$datas[] = $dtoc ? dtoc(date('Y-m-d',$feriados[$x])) : date('Y-m-d',$feriados[$x]);
 	
-	// Caso deseja obter se a data atual (hoje) � um dos feriados nacionais.
+	// Caso deseja obter se a data atual (hoje) é um dos feriados nacionais.
 	if($isDay)
 		return in_array(date('Y-m-d'), $datas);
 
@@ -283,7 +278,7 @@ function daysHolidays($ano = null, $isDay = true, $dtoc = false)
 }
 	
 /**
- * Retorna quando � sabado ou domingo
+ * Retorna quando é sabado ou domingo
  * Informa se a data ou dia atual e - true - um fim de semana (sab, dom) ou nao - false -.
  * Exemplo de uso:
  * 	itsWeekend('14-04-2019') -> Data Especifica
@@ -305,7 +300,7 @@ function daysHolidays($ano = null, $isDay = true, $dtoc = false)
 		// checkdate(mes, ano, dia) verifica se os valores informados formam uma data valida e retorna um true ou false
 		isset($data[1]) ? $isDate = checkdate($data[1], $data[2], $data[0]) : $isDate = false;
 
-		// Verifica se � uma data valida
+		// Verifica se é uma data valida
 		if($isDate){
 			// A magica acontece aqui, ele monta a data em timestamp e utiliza o date(n) para retornar a data da semana
 			$diasemana = date("N", mktime(0,0,0,$data[1],$data[2],$data[0]));		
@@ -331,7 +326,7 @@ function daysHolidays($ano = null, $isDay = true, $dtoc = false)
  */
 function tiraAcento($texto)
 {
-	$trocarIsso = array('�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','�','O','�','�','�','�m',"'");
+	$trocarIsso = array('à','á','â','ã','ä','å','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ù','ü','ú','ÿ','À','Á','Â','Ã','Ä','Å','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ñ','Ò','Ó','Ô','Õ','Ö','O','Ù','Ü','Ú','µm',"'");
 
 	$porIsso = array('a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','u','u','u','y','A','A','A','A','A','A','C','E','E','E','E','I','I','I','I','N','O','O','O','O','O','O','U','U','U','um',' ');
 	$titletext = str_replace($trocarIsso, $porIsso, $texto);
@@ -341,12 +336,12 @@ function tiraAcento($texto)
 /**
  * RETIRA OS CARACTERES ESPECIAIS -- Matheus Henrique 21/03/2019
  * CASO NECESSARIO UTILIZAR EM CONJUNTO COM tiraAcento() ;
- * Exemplo: tiraEspeciais('Camar�o ou a 2� op��o?, Apenas Qual o $?')
- * retorno 'Camar�o-ou-a-2_-op��o_,-Apenas-Qual-o __'
+ * Exemplo: tiraEspeciais('Camarão ou a 2º opção?, Apenas Qual o $?')
+ * retorno 'Camarão-ou-a-2_-opção_,-Apenas-Qual-o __'
  */
 function tiraEspeciais($texto, $espaco = false)
 {
-	$trocarIsso = array(' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','�','�',"'");
+	$trocarIsso = array(' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','º','ª',"'");
 	
 	$porIsso 	= array('-','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','-');
 	
@@ -356,26 +351,6 @@ function tiraEspeciais($texto, $espaco = false)
 	$titletext 	= str_replace($trocarIsso, $porIsso, $texto);
 	return $titletext;
 }
-
-
-/**
- * encripta url para guardar em variavel
- */
-/*
-function urltostr($url){
-	$url = str_replace("?","!",$_SERVER['REQUEST_URI']);
-	$url = str_replace("&","*",$url);
-	
-	return $url;
-}
-
-function strtourl($str){
-	$str = str_replace("!","?",$str);
-	$str = str_replace("*","&",$str);
-	
-	return $str;
-}
-*/
 
 function tempodiff($data1,$hora1,$data2,$hora2)
 { 
@@ -448,7 +423,7 @@ function mesextenso($mes,$numcaracter=0,$lower = false)
 	switch ($mes){
 		case 1: $mes  = "JANEIRO"; break;
 		case 2: $mes  = "FEVEREIRO"; break;
-		case 3: $mes  = "MAR�O"; break;
+		case 3: $mes  = "MARÇO"; break;
 		case 4: $mes  = "ABRIL"; break;
 		case 5: $mes  = "MAIO"; break;
 		case 6: $mes  = "JUNHO"; break;
@@ -472,7 +447,7 @@ function mesExtensoToNum($mesExtenso)
 	switch ($mes){
 		case "JANEIRO": return "01" ; break;
 		case "FEVEREIRO": return "02" ; break;
-		case "MAR�O": return "03" ; break;
+		case "MARÇO": return "03" ; break;
 		case "ABRIL": return "04" ; break;
 		case "MAIO": return "05" ; break;
 		case "JUNHO": return "06" ; break;
@@ -490,11 +465,11 @@ function diaextenso($dia)
 	switch ($dia){
 		case 1: $dia = "domingo"; break;
 		case 2: $dia = "segunda-feira"; break;
-		case 3: $dia = "ter�a-feira"; break;
+		case 3: $dia = "terça-feira"; break;
 		case 4: $dia = "quarta-feira"; break;
 		case 5: $dia = "quinta-feira"; break;
 		case 6: $dia = "sexta-feira"; break;
-		case 7: $dia = "s�bado"; break;
+		case 7: $dia = "sábado"; break;
 	}
 	return $dia;
 }
@@ -513,9 +488,7 @@ function getWeekDays($ano)
 		$d2 = $di + 24 * 60 * 60 * (7 - $dow);
 
 		$di = tscalc($d2,1);
-		
-		//echo $sem . ' - ' . date('d/m/Y',$d1) . ' a ' . date('d/m/Y',$d2) . '<br>';
-		
+				
 		$asem[$sem++] = array($d1,$d2);
 
 	}
@@ -624,8 +597,8 @@ function segToIntHora($seg)
  * Matheus Henrique 20/05/2019
  * 
  * 
-  * Fun��o de porcentagem: Quanto � X% de N?
-  * exemplo: "Quanto � 17% de 127?"
+  * Funçao de porcentagem: Quanto é X% de N?
+  * exemplo: "Quanto é 17% de 127?"
   * porcentagem_xn(17, 127)
   */
 function porcentagem_xn ( $porcentagem, $total )
@@ -634,8 +607,8 @@ function porcentagem_xn ( $porcentagem, $total )
 }
 
 /**
- * Fun��o de porcentagem: N � X% de N
- * exemplo: "2.42 � X% de 22?".
+ * Função de porcentagem: N é X% de N
+ * exemplo: "2.42 é X% de 22?".
  * porcentagem_nx(2.42, 22)
 */
 function porcentagem_nx ( $parcial, $total )
@@ -644,7 +617,7 @@ function porcentagem_nx ( $parcial, $total )
 }
 
 /**
- * Fun��o de porcentagem: N � N% de X
+ * Função de porcentagem: N é N% de X
  * valor parcial e a porcentagem, qual o valor total?
  * porcentagem_nnx ( 2.42, 11 )
  */
@@ -759,7 +732,7 @@ function isGet()
 	$args = func_get_args();
 	foreach($args as $get){
 		if(!isset($_GET[$get])){
-			alert('Par�metro GET n�o encontrado: '.$get,true);
+			alert('Parâmetro GET não encontrado: '.$get,true);
 			exit;
 		}
 	}
@@ -770,7 +743,7 @@ function verifPost($url='',$alert=true)
 	$url = empty($url) ? '?p='.($_GET['p'] ?? 'home') : $url;
 	if($_SERVER['REQUEST_METHOD']!='POST'){
 		if($alert)
-			alert('Sess�o Expirada! Teremos que recome�ar.',empty($url),$url);
+			alert('Sessão Expirada! Teremos que recomeçar.',empty($url),$url);
 		else
 			return false;
 	}elseif(!$alert){
@@ -785,7 +758,7 @@ function verifSession($var,$url='',$alert=true)
 	if(!isset($_SESSION[$var])){
 
 		if($alert)
-			alert('Sess�o Expirada!',empty($url),$url);
+			alert('Sessão Expirada!',empty($url),$url);
 		else
 			return false;
 
@@ -953,14 +926,14 @@ function xml2array($arquivo,$type='file')
 			if(! @$xml = simplexml_load_file($arquivo))
 				throw new Exception('erro');
 		}catch(Exception $e){
-			throw new Exception('N�o foi poss�vel carregar o arquivo xml');
+			throw new Exception('Não foi possível carregar o arquivo xml');
 			exit;
 		}
 	}elseif($type=='string'){
 		try{	
 			@$xml = simplexml_load_string($arquivo);
 		}catch(Exception $e){
-			throw new Exception('N�o foi poss�vel carregar o arquivo xml');
+			throw new Exception('Não foi possível carregar o arquivo xml');
 			exit;
 		}
 	}
@@ -1030,7 +1003,7 @@ function array_map_recursive($function, $arr)
 
 function portal_gethost()
 {
-	$_SESSION['usr_host'] = str_replace('.whb.net','',gethostbyaddr($_SERVER['REMOTE_ADDR']));
+	$_SESSION['usr_host'] = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 	return $_SESSION['usr_host'];
 }
 
@@ -1109,12 +1082,12 @@ function bloqueiaIE()
 {
 	$navegador_usado = $_SERVER['HTTP_USER_AGENT'];
 	if(strrpos($navegador_usado, 'MSIE') || strrpos($navegador_usado, 'Trident')){
-		alert("A vers�o do seu navegador n�o � compat�vel com os recursos. Por favor utilize Google Chrome ou Mozilla Firefox",null,'?p=home');
+		alert("A versão do seu navegador não é compatível com os recursos. Por favor utilize Google Chrome ou Mozilla Firefox",null,'?p=home');
 	}
 }
 
 /**
- * Fun��o que retorna um array com valor sem repti��o de dados 
+ * Função que retorna um array com valor sem reptição de dados 
  * baseado na $key [coluna] informada
  */
 function super_unique($array,$key)
@@ -1134,24 +1107,21 @@ function toVal($val)
 }
 
 /**
- * Fun��o para verificar se o portal esta rodando no ambiente de produ��o
- * Melhoria --  Incluido portalfornecedor e dipostos em array
+ * Função para verificar se o o sistema esta rodando no ambiente de produção
  */
 function isProducao()
 {
-	$producao = ['https://portal.whbbrasil.com.br/', 'https://portal.ferramentastroy.com.br/','https://portal.zaire.com.br/', 'https://portal.itesapar.com.br/', 'http://portal.whbbrasil.com.br/', 'http://portal.ferramentastroy.com.br/', 'http://portal.zaire.com.br/', 'http://portal.itesapar.com.br/'];
+	$producao = ['https://onservices.com.br/', 'https://www.onservices.com.br/','https://api.onservices.com.br/'];
 
-	$fornecedor = ['http://portalfornecedor.whbbrasil.com.br/','https://portalfornecedor.whbbrasil.com.br/','http://portalfornecedor.itesapar.com.br/','https://portalfornecedor.itesapar.com.br/', 'http://portalfornecedor.zaire.com.br/','https://portalfornecedor.zaire.com.br/', 'http://portalfornecedor.ferramentastroy.com.br/','https://portalfornecedor.ferramentastroy.com.br/'];
-
-	if (in_array(DIRPAGE, $producao) || in_array(DIRPAGE, $fornecedor)) {
+	if (in_array(DIRPAGE, $producao)) {
 		return true;
 	}
 	return false;
 }
 
 /**
- * Fun��o para abstrair o retorno de JSON com header correto
- * Caso precise utiliza a fun��o array_map_recursive basta informar o segundo parametro como true
+ * Função para abstrair o retorno de JSON com header correto
+ * Caso precise utiliza a função array_map_recursive basta informar o segundo parametro como true
  */
 function arrToJson(Array $arr, $recursive = false)
 {

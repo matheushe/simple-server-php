@@ -12,43 +12,9 @@ if(navigator.appName.indexOf("Internet Explorer")!=-1){     //yeah, he's using I
         navigator.appVersion.indexOf("MSIE 9")==-1 &&   //v9 is ok
         navigator.appVersion.indexOf("MSIE 1")==-1  //v10, 11, 12, etc. is fine too
     );
-
-    if(badBrowser){
-  document.write('<h3>Navegador Desatualizado!</h3>Seu navegador está desatualizado e não dá suporte ao sistema Portal! Favor utilizar outro navegador como Google Chrome, Mozilla Firefox, Internet Explorer 9 ou superior');
-
-    }
 }
 </script>
 
-<!--[if lt IE 9]>
-  <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 8]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js">
-	
-	document.write('Navegador não suportado! Favor utilizar outro navegador como Google Chrome, Mozila Firefox, Internet Explorer 10 ou superior');
-
-  </script>
-<![endif]-->
-
-<!--[if lt IE 7]>
-<script type="text/javascript">
-var ie7 = true;
-var ie8 = false;
-</script>
-<![endif]-->
-
-<!--[if lt IE 8]>
-<script type="text/javascript">
-var ie8 = true;
-var ie7 = false;
-</script>
-<![endif]-->
     
 <!-- JS COMPOSER -->
 <script type="text/javascript" src="lib/vendor/components/jquery/jquery.min.js"></script>

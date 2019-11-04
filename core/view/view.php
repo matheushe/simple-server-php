@@ -2,7 +2,7 @@
 
 class View{
 	
-	public static function imprime($html,$dados=array(),$tit='Portal WHB',$imp=false){
+	public static function imprime($html, $dados=array(), $tit = SYSNAME, $imp=false){
 
 		$header = '';
 
@@ -39,7 +39,7 @@ class View{
 				return $f.DS.'view'.DS.$subfolder.DS.$nome;
 			}
 		}
-		$msg .= 'n„o encontrado <br>';
+		$msg .= 'n√£o encontrado <br>';
 		
 		echo $msg;
 		
@@ -66,7 +66,7 @@ class View{
 				return View::ret_html($contents,$dados);
 			}
 		}
-		$msg .= 'n„o encontrado <br>';
+		$msg .= 'n√£o encontrado <br>';
 		
 		echo $msg;
 		
@@ -87,7 +87,7 @@ class View{
 				return View::ret_html(View::get_file($f.DS.'view'.DS.'html'.DS.$url),$dados);
 			}
 		}
-		$msg .= 'n„o encontrado <br>';
+		$msg .= 'n√£o encontrado <br>';
 		
 		echo $msg;
 		
@@ -105,7 +105,7 @@ class View{
 				return View::ret_html(View::get_file($f.DS.'view'.DS.'css'.DS.$url),$dados);
 			}
 		}
-		$msg .= 'n„o encontrado <br>';
+		$msg .= 'n√£o encontrado <br>';
 		
 		echo $msg;
 		
@@ -126,7 +126,7 @@ class View{
 				return View::ret_html(View::get_file($f.DS.'view'.DS.'js'.DS.$url),$dados);
 			}
 		}
-		$msg .= 'n„o encontrado <br>';
+		$msg .= 'n√£o encontrado <br>';
 		
 		echo $msg;
 		
@@ -203,10 +203,10 @@ class View{
 	
 	public static function get_icon($url){
 
-		$urlfull = "app/view/img/icons/".$url;
+		$urlfull = "core/view/img/icons/".$url;
 			
 		if(!file_exists($urlfull) || empty($url)){
-			$urlfull = "app/view/img/icons/default.png";
+			$urlfull = "core/view/img/icons/default.png";
 		}
 		
 		return $urlfull;
@@ -217,7 +217,7 @@ class View{
 		if(file_exists($url)){
 			$file = View::ret_html(fread(fopen($url,"r"),filesize($url)),$dados);
 		}else{
-				trigger_error('Arquivo n„o encontrado: '.$url);
+				trigger_error('Arquivo n√£o encontrado: '.$url);
 			$file = "";
 		}
 
@@ -231,7 +231,7 @@ class View{
 		echo  View::get_html("cabec",array("%TIT%" => $titulo));
 	}
 	
-	public static function msg($msg,$tipo,$but=array(),$msg2=''){//true,$click="",$bt1=null){
+	public static function msg($msg, $tipo, $but=array(), $msg2=''){//true,$click="",$bt1=null){
 		
 		//-- $but == false #does not display any but
 		if(is_bool($but) && !$but)
@@ -294,9 +294,8 @@ class View{
 		
 	}
 
-	//-- joaofr
 	//-- 20/07/2018
-	//-- mÈtodo que retorna a tag html do icone
+	//-- m√©todo que retorna a tag html do icone
 	//-- aceita como parametro:
 	//-- * o nome do arquivo .png (ex: 'default.png' || 'ok.png' || 'voltar.png', etc...)
 	//-- * nomes de icones font-awesome ou glyphicon (ex: 'fa fa-desktop' || 'glyphicon flyphicon-star')

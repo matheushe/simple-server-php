@@ -90,15 +90,9 @@ class Model{
 	}
 
 	public function recupera($id){
-		//if(isset($_SESSION['usr_login']) && $_SESSION['usr_login']=="joaofr")
-		//	$this->setDebug(1);
+
 		$this->get("*",is_array($id) ? implode(' and ',$id) : $this->id_field."='$id'");
 		$this->result();
-
-//		if(isset($_SESSION['usr_login']) && $_SESSION['usr_login']=="joaofr"){
-//			$this->setDebug(0);
-//			ver($this->num_rows);
-//		}
 	}
 
 	public function selectDb($dbname){
@@ -188,8 +182,8 @@ class Model{
 		if(is_array($where))
 			list($where,$dt) = $where;
 
-		//--verifica se tabela é exclusiva ou compartilhada
-		if (!empty($this->datadb->database) && !in_array($this->datadb->database,array('db_apontamento','vetorh','whb2')) && $this->modo<>'S' && strpos($where,"str_filial='")===false) 
+		//--verifica se tabela Ã© exclusiva ou compartilhada
+		if (!empty($this->datadb->database) && $this->modo<>'S' && strpos($where,"str_filial='")===false) 
 			$where = (($where) ? '('.$where.') AND ' : '') . (!empty($this->datadb->database) ? $this->datadb->database.'.' : '') . $this->tabela .".str_filial = '".$this->xFilial($this->tabela)."' ";
 
 		if($where) $sql .= " where ".$where;
@@ -287,7 +281,7 @@ class Model{
 					 "into ".(!empty($this->datadb->database) ? $this->datadb->database.'.' : '').$this->tabela." (" . implode(",",array_keys($this->dados)) .
 				 ") values ('" . implode("','",$this->dados) . "')";
 		
-		$this->tryCRUD($sql,'inclusão');
+		$this->tryCRUD($sql,'inclusÃ£o');
 				
 		if(in_array($this->dbtype(),array('mysql','mysqli')))
 			$this->insert_id = $this->datadb->Insert_ID();
@@ -349,7 +343,7 @@ class Model{
 
 		$sql .= " where ". ($where ? stripslashes($where) : ' '.$this->id_field.' = '.$this->dados_result[$this->id_field]);
 
-		$this->tryCRUD($sql,'atualização');
+		$this->tryCRUD($sql,'atualizaÃ§Ã£o');
 		
 		if(isset($_GET['id'])){
 			foreach($this->models as $m){
@@ -438,7 +432,7 @@ class Model{
 					 " where " . ($where ? stripslashes($where) : " ".$this->id_field." = ".$this->id);
 		
 		//-- executa exclusao
-		$this->tryCRUD($sql,'exclusão');
+		$this->tryCRUD($sql,'exclusÃ£o');
 
 		//-- percorre o(s) ID deletado(s)
 		foreach($id_del as $del){
@@ -483,51 +477,11 @@ class Model{
 
 		} catch (Exception $e) {
 			
-			if($e->getCode()=='1062'){
-				View::imprime(View::msg("Não é possível inserir chave duplicada para a tabela: ".$this->tabela."!".'<br><br>'.
-				'<button type="button" class="btn btn-danger" onclick="$(\'#portal_erro_chv_dupl\').toggle()"><strong>DETALHES</strong></button><div id="portal_erro_chv_dupl" style="display:none"><br><br>'.$e->getMessage().'<br><br>SQL EXECUTADO:<br><br> '.$sql.'</div>','alert'));
-				
-				$titulo = 'CHAVE DUPLICADA';
-
-				$msg = 'Prezado Srs. Analistas de TI, ocorreu tentativa de inserção de chave duplicada no sistema Portal. <br><br>'.
-							 '<string>Usuário:</strong> '.(isset($_SESSION['usr_login']) ? $_SESSION['usr_login'] : '-' ). '<br><br>'.
-							 '<string>URL:</strong> '. $_SERVER['REQUEST_URI'] . '<br><br>'.
-							 '<string>Tabela:</strong> '.$this->tabela.'<br><br>'.
-							 '<strong>Mensagem:</strong> '.$e->getMessage().'<br><br>'.
-							 '<strong>SQL EXECUTADO:</strong> '.$sql;
-
-				//-- tabela para rastrear a origem do problema							 
-				$msg .= '<br><br>'.sysDebugInfo();
-
-				$e = new Email();
-				$e->html(View::get_html('email.html',
-				         array("%TITULO%"   => $titulo,
-				               "%CONTEUDO%" => $msg)));
-
-				if(!Permissao::verifica('analista')){
-
-					$e->addto('joaofr@whbbrasil.com.br');
-					$e->addto('maycondm@whbbrasil.com.br');
-					$e->addto('matheusha@whbbrasil.com.br');
-					$e->addto('julianohb@whbbrasil.com.br');
-					
-				}else{
-					$e->addto($_SESSION['usr_email']);
-				}
-
-				$e->send('*** '.$titulo.' ***');
-
-				exit;
-				
-/*				alert(,false,
-						"?p=".$_GET['p']."&op=form&opc=".$_GET['op']. (isset($_GET['id']) ? "&id=".$_GET['id'] : ''));
-	*/		}
-			
 			die('Erro na '.$acao.':<br>
 				<div style="color:red">
 				<details><summary>Erro:</summary>'.$e->getMessage().'</details>
 				<details><summary>SQL:</summary>'.$sql.'</details><br>
-				</div><br><a href="?p=home">Home</a>');
+				</div><br>');
 		}
 	}
 
@@ -605,12 +559,12 @@ class Model{
 		
 				$ind_id_encontrado++;
 
-				//-- verifica se é o que está procurando
+				//-- verifica se Ã© o que estÃ¡ procurando
 				if(($como=='igual' && $xM[$por]==$oque) ||
 					 ($como=='contem' && !empty($oque) && strpos($xM[$por],$oque)!==false) ||
 						strtoupper(substr($xM[$por],0,strlen(trim($oque))))==strtoupper(trim($oque))){
 
-					//-- se encontrar, retorna o id e o indice (indice servirá para paginacao)
+					//-- se encontrar, retorna o id e o indice (indice servirÃ¡ para paginacao)
 					return array($xM['id_field'],$ind_id_encontrado);
 					break;
 				}
@@ -690,9 +644,9 @@ class Model{
 					isset($_GET['cfield']) && $_GET['cfield'] == $_SESSION['consulta_fil'][$this->tabela][1] ){
 
 					//-- aqui substituimos o conjunto de caracteres "[[$sys005->str_filconsulta]]" por branco ""
-					//-- para não dar erro de sintaxe na execução da query.
+					//-- para nÃ£o dar erro de sintaxe na execuÃ§Ã£o da query.
 					//-- este conjunto de caracteres pode ter sido atribuido ao filtro da sessao 
-					//-- no fonte "portalcontroller.php" método "consulta()" 
+					//-- no fonte "portalcontroller.php" mÃ©todo "consulta()" 
 					$where .= (!empty($where) ? ' AND ' : '') . '(' . str_replace('%str_filconsulta%',"",$_SESSION['consulta_fil'][$this->tabela][2]) . ')';
 				}
 			}
@@ -736,18 +690,12 @@ class Model{
 		
 		$_SESSION['brw_ord'] = $brw_ord;
 
-		//--verifica se tabela é exclusiva ou compartilhada
-		/*
-		if (!empty($this->datadb->database) && !in_array($this->datadb->database,array('db_apontamento','vetorh','whb2')) && !in_array($this->tabela,array('whb0059'))) 
-		$where .= (($where) ? ' AND ' : '') . (!empty($this->datadb->database) ? $this->datadb->database.'.' : '') . $this->tabela.".str_filial = '".$this->xFilial($this->tabela)."' ";
-		*/
+		//--verifica se tabela Ã© exclusiva ou compartilhada
+	
 		if ($this->datadb->database==MYSQL_DBNAME && $this->filtraFilial())
 			$where .= (($where) ? ' AND ' : '') . $this->datadb->database.'.'. $this->tabela.".str_filial = '".$this->xFilial($this->tabela)."' ";
 
 		$sql .= $where ? " where " . $where : "";
-
-		//if(isset($_SESSION['usr_login']) && $_SESSION['usr_login']=='joaofr')
-		//	ver($where,0);
 
 		if(!empty($group)){
 			$sql .= " GROUP BY ".$group;
@@ -760,18 +708,10 @@ class Model{
 				$sql .= ' , '.$this->tabela.'.'.$this->id_field.' asc ';
 
 			if($this->datadb->databaseType=='mssqlnative'){
-				//------------------- PARA MSSQL 2012 OU MAIOR, FUNCIONA OFFSET , FETCH
-				if($this->name_conn != 'zaire'){ //-- melhorar esta linha nao pode ficar assim.............24/04/2017
-
-					if(!$busca && $limit)
-						$sql .= " offset ".(($brw_pag[$this->tabela] * $this->brw_limit) - $this->brw_limit)." ROWS FETCH NEXT ".$this->brw_limit." ROWS ONLY ";
-
-				}
+				if(!$busca && $limit)
+					$sql .= " offset ".(($brw_pag[$this->tabela] * $this->brw_limit) - $this->brw_limit)." ROWS FETCH NEXT ".$this->brw_limit." ROWS ONLY ";
 			}
 		}
-
-		 // if(isset($_SESSION['usr_login']) && $_SESSION['usr_login']=="julianohb")
-		 // ver($sql);
 
 		try {
 
@@ -786,13 +726,7 @@ class Model{
 
 				$_SESSION['brw_sql'][$this->tabela] = $sql;
 
-				//---------------- PARA MSSQL 2012 OU MAIOR (nao é o caso da zaire), FUNCIONA OFFSET , FETCH
-				//-- melhorar esta linha nao pode ficar assim.............24/04/2017
-				// if(isset($_SESSION['usr_login']) && $_SESSION['usr_login']=='joaofr'){
-					// ver($sql,0);
-					// ver($this->datadb->databaseType);
-				// }
-				if($this->datadb->databaseType=='mssqlnative' && $this->name_conn != 'zaire'){
+				if($this->datadb->databaseType=='mssqlnative'){
 					return $this->datadb->getAll($sql);
 				}else{
 					$this->result = $this->datadb->SelectLimit($sql,$this->brw_limit,($brw_pag[$this->tabela] * $this->brw_limit) - $this->brw_limit);
@@ -803,14 +737,14 @@ class Model{
 
 		} catch (Exception $e) {
 			die($sql . '<br><br><br>'.
-			"Erro na listagem:".$e->getMessage().'<br><a href="javascript:history.go(-1)">Voltar</a>');
+			"Erro na listagem:".$e->getMessage());
 		}
 
 	}
 
 	private function filtraFilial(){
 		//-- E = Tabela Exclusiva deve filtrar filial
-		//-- diferente de E seria C=Compartilhado e S=Não filtra filial 
+		//-- diferente de E seria C=Compartilhado e S=NÃ£o filtra filial 
 		return $this->modo=='E';
 	}
 
@@ -828,9 +762,6 @@ class Model{
 		$sql = " SELECT str_sqlcombo FROM ".MYSQL_DBNAME.".".($par ? 'sys003' : 'sys001') ."
 				 WHERE str_tab = '".$this->tabela."'
 				 AND str_campo = '$cpo'";
-
-		//if(isset($_SESSION['usr_login']) && $_SESSION['usr_login']=="joaofr")
-			//ver($sql);
 
 		$sql = $localdb ? $this->db->GetOne($sql) : $this->datadb->GetOne($sql);
 
@@ -862,10 +793,10 @@ class Model{
 	}
 
 	/**
-	 * Esta funcao é utilizada durante todo o sistema
+	 * Esta funcao Ã© utilizada durante todo o sistema
 	 * ela faz uma consulta na tabela sys001
 	 * e traz todos os campos da tabela solicitada
-	 * contendo todos as características de cada campo
+	 * contendo todos as caracterÃ­sticas de cada campo
 	 */
 	public function cabec($rs=null){
 
@@ -938,8 +869,8 @@ class Model{
 			}
 
 			//-- troca simbolos
-			//-- para diminuir o comando, permite-se utilizar o ponto e vírgula (;) 
-			//-- este será substituído por UNION SELECT
+			//-- para diminuir o comando, permite-se utilizar o ponto e vÃ­rgula (;) 
+			//-- este serÃ¡ substituÃ­do por UNION SELECT
 			$sql = str_replace(';','UNION SELECT',$sql);
 
 			//-- SE NAO FOR UM SELECT "FROM" ALGUMA TABELA
@@ -949,11 +880,11 @@ class Model{
 
 				//-- select base com o nome dos campos
 				$sql = "SELECT '' AS VALUE, '' AS DESCR UNION ".$sql;
-				//inicializa o array de retorno vazio, pois a primeira posicao em branco virá do select base
+				//inicializa o array de retorno vazio, pois a primeira posicao em branco virÃ¡ do select base
 				$arr = array(); 
 
 			}else{
-				//-- inicializa o array de retorno com a primeira posição em branco
+				//-- inicializa o array de retorno com a primeira posiÃ§Ã£o em branco
 				$arr = array('' => ''); 
 			}
 
@@ -979,36 +910,14 @@ class Model{
 		}
 	}
 
-	//-- retorna as abas que aparecerao no form
-	/*
-	public function formTabsIndex($opc){
-
-		$s4=new Sys004();
-		$s4->get('*',['str_tabela=?',[$this->tabela]],"str_ordem,id");
-
-		$tabidx = [];
-		$i=0;
-		while($s4->result()){
-			if($s4->dados_result['str_'.$opc]=='S'){
-				//echo $s4->str_folder;
-				$tabidx[$i] = $s4->dados_result;
-			}
-			$i++;
-		}
-
-		return empty($tabidx) ? array(Sys004::getGenericTab()) : $tabidx;
-
-	}
-	*/
-	
-	//-- retorna o array de campos que aparecerão no form
+	//-- retorna o array de campos que aparecerÃ£o no form
 	public function cabecForm($opc){
 
 		if($opc=='revisa')
 			$opc='inclui';
 
 		//-- filtra os campos que estao nas abas(tabs) que nao serao exibidas 
-		//-- de acordo com a configuração de exibição do cadastro da aba
+		//-- de acordo com a configuraÃ§Ã£o de exibiÃ§Ã£o do cadastro da aba
 		$tabidx = $this->getTabs($opc);
 
 		//-- traz os campos do form das abas(tabs) de acordo com a opc.
@@ -1076,7 +985,7 @@ class Model{
 			$this->datadb->SetFetchMode(ADODB_FETCH_ASSOC);
 	}
 
-	//-- verifica se no cadasro da tabela está marcado a opção de banco de arquivos
+	//-- verifica se no cadasro da tabela estÃ¡ marcado a opÃ§Ã£o de banco de arquivos
 	public function issetBancoArq(){
 		return $this->db->GetOne("SELECT str_formfiles FROM ".MYSQL_DBNAME.".sys005 WHERE str_nome = '".$this->tabela."'")=='S';
 	}
