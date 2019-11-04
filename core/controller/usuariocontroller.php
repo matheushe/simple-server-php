@@ -8,13 +8,6 @@ class usuariocontroller extends controller{
         echo 'USUARIO';
     }
 
-    public function __construct()
-    {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST');
-        header('Access-Control-Allow-Headers: Content-Type');
-    }
-
     public function autenticaUser()
     {
         $dados = getPost(true);

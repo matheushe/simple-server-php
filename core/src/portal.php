@@ -1143,3 +1143,32 @@ function getPost($array = false){
 	}
 	return file_get_contents('php://input');
 }
+
+/**
+ * Exibe todas as configuracoes padroes do sistema
+ */
+function configSYS(){
+	ver('SYSNAME -> ' . SYSNAME,0);
+	ver('SYSVERSION -> ' . SYSVERSION,0);
+	ver('DEBUG -> ' . DEBUG,0);
+	ver('SISTEMA_PROPRIETARIO_NOME -> ' . SISTEMA_PROPRIETARIO_NOME,0);
+	ver('SISTEMA_PROPRIETARIO_EMAIL -> ' . SISTEMA_PROPRIETARIO_EMAIL,0);
+	ver('DIRPAGE -> ' . DIRPAGE,0);
+	ver('DIRREQ -> ' . DIRREQ,0);
+	ver('IMGCORE -> ' . IMGCORE,0);
+	ver('IMGAPP -> ' . IMGAPP,0);
+	ver('PUBLICO -> ' . PUBLICO,0);
+	ver('AJAX -> ' . AJAX,0);
+	ver('MYSQL_DBNAME -> ' . MYSQL_DBNAME,0);
+	ver('A_STRCONN -> ' . A_STRCONN,0);
+	ver('SMTP_SERVER -> ' . SMTP_SERVER,0);
+	ver('SMTP_PORT -> ' . SMTP_PORT,0);
+	ver('SMTP_ACCOUNT -> ' . SMTP_ACCOUNT,0);
+	ver('SMTP_PASS -> ' . SMTP_PASS,0);
+	ver('DS -> ' . DS,0);
+	ver('FOLDERS -> ' . FOLDERS,0);
+	ver('SUBFOLDERS -> ' . SUBFOLDERS,0);
+	ver('MAX_FILE_SIZE -> ' . MAX_FILE_SIZE,0);
+	ver('date_default_timezone_get -> ' . date_default_timezone_get(),0);
+	ver($_SERVER);
+}

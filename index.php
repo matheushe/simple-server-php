@@ -2,10 +2,6 @@
 	//-- force content compression for browsers that supports it.
 	$a = ob_start("ob_gzhandler");
 
-	// header('Access-Control-Allow-Origin: *');
-	// header('Access-Control-Allow-Methods: GET, POST');
-	// header("Access-Control-Allow-Headers: X-Requested-With");
-
 	//-- inclui a biblioteca portal.php (contém as funções básicas do sistema)
 	require_once 'config/defines.php';
 

@@ -7,14 +7,6 @@ class audproController extends controller{
      * Funcao de contrucao do controller, tudo o que estiver aqui e compartilhado entre as outras funcoes
      * Matheus Henrique
      */
-    public function __construct()
-    {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST');
-        header('Access-Control-Allow-Headers: Content-Type');
-        if(isset($_GET['emp']))
-            $_SESSION['usr_filial'] = $_GET['emp'];
-    }
 
     /**
      * Apenas para espantar curiosos
@@ -22,8 +14,6 @@ class audproController extends controller{
     public function index()
     {
         echo 'Não a nada aqui pra voce';
-        $s = new sys005;
-        ver($s->getall('*'));
     }
 
     /**

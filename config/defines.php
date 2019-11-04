@@ -1,6 +1,7 @@
 <?php
 	
 	define('SYSNAME','ServerHost');
+	define('SYSVERSION','1.201.3');
 	define('DEBUG',true);
 	define('SISTEMA_PROPRIETARIO_NOME','MATHEUS HENRIQUE RODRIGUES');
 	define('SISTEMA_PROPRIETARIO_EMAIL', 'matheus_henriquealves@hotmail.com');
@@ -12,6 +13,7 @@
 
 	define('IMGCORE',DIRPAGE.'core/view/img/');
 	define('IMGAPP',DIRPAGE.'aplicacao/view/img/');
+	define('PUBLICO',DIRPAGE.'publico/');
 
 	define('AJAX',isset($_GET['ajax']));
 	

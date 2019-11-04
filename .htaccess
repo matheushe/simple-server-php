@@ -1,0 +1,22 @@
+
+DirectoryIndex index.php index.html
+
+php_flag display_startup_errors on
+php_flag display_errors on
+php_flag html_errors on
+php_flag log_errors on
+php_value error_log php_errors.log
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule %{REQUEST_FILENAME} !-d
+
+# pulo do gato
+# verifica se nao foi passado nenhum parametro na query_string (linha abaixo)
+# se algum parêmtro for passado, ex: ?p=chamado , nao faz a reescrita da URL
+#RewriteCond %{QUERY_STRING} ^$
+RewriteCond %{QUERY_STRING} !(^|&)p=(.*)+($|&)
+RewriteCond %{REQUEST_URI} !(lib/vendor/[^.]+)$
+
+###RewriteRule ^(.*)$ public/index.php?url=$1 [QSA,L]
