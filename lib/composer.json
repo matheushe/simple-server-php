@@ -1,0 +1,14 @@
+{
+    "name": "server/server",
+    "description": "conjunto de pacotes api",
+    "require": {
+        "adodb/adodb-php": "^5.20"
+    },
+
+    "autoload":{
+        "psr-4":{
+            "App\\":"../app/"
+        }
+    }
+
+}
