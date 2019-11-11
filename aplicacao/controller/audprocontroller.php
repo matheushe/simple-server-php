@@ -7,6 +7,14 @@ class audproController extends controller{
      * Funcao de contrucao do controller, tudo o que estiver aqui e compartilhado entre as outras funcoes
      * Matheus Henrique
      */
+    public function __construct()
+    {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST');
+        header('Access-Control-Allow-Headers: Content-Type');
+        if(isset($_GET['emp']))
+            $_SESSION['usr_filial'] = $_GET['emp'];
+    }
 
     /**
      * Apenas para espantar curiosos
@@ -29,7 +37,7 @@ class audproController extends controller{
         $nconform = $tbl_nconform->getall('id_qua115', '(str_status = "" or str_status is null) and dat_data = "' . Date('Y-m-d') . '"', null, 'id_qua115');
 
         //Busca todos os produtos
-        $dado = $tbl_cad_audit->getall("*");
+        $dado = $tbl_cad_audit->getall("*", 'str_codcli !=""');
         $nc = [];
 
         //Monta um array com as chaves sendo o id_qua115 das nao conformidades
@@ -39,7 +47,7 @@ class audproController extends controller{
         //Atribui nao conformidade
         foreach ($dado as $key => $value){           
             $dado[$key]['naoConform'] = (array_key_exists($value['id'], $nc) ? 'S' : 'N');
-            $dado[$key]['str_descprod'] = utf8_decode($value['str_descprod']);
+            $dado[$key]['str_descprod'] = strtoupper(utf8_decode($value['str_descprod']));
         }
 
         $tbl_cad_audit->__destruct();
@@ -154,7 +162,7 @@ class audproController extends controller{
         //Caso naoo exista, salva os dados necessários
         }else{
             $audit->str_prod = $prod['str_codpro'];
-            $audit->str_descprod = trim(utf8_decode($prod['str_descprod']));
+            $audit->str_descprod = strtoupper(trim(utf8_decode($prod['str_descprod'])));
             $audit->str_numserie = $lote['num_serie'];
             $audit->str_lote = $lote['num_lote'];
             $audit->id_qua115 = $prod['id'];
@@ -190,7 +198,7 @@ class audproController extends controller{
         $audit = new tbl_audit;
 
         $audit->str_prod = $prod['str_codpro'];
-        $audit->str_descprod = utf8_decode($prod['str_descprod']);
+        $audit->str_descprod = strtoupper(utf8_decode($prod['str_descprod']));
         $audit->dat_data = Date('Y-m-d');
         $audit->str_hora = Date('H:i');
         $audit->id_qua115 = $prod['id'];
@@ -437,7 +445,7 @@ class audproController extends controller{
         else{
             $audit = $q15->getall('*', false, 'dat_data desc', null, '10');
             foreach ($audit as $key => $value) {
-                $audit[$key]['str_descprod'] = utf8_decode($value['str_descprod']);
+                $audit[$key]['str_descprod'] = strtoupper(utf8_decode($value['str_descprod']));
             }
             arrToJson($audit, true);
             $q15->__destruct();
@@ -458,7 +466,6 @@ class audproController extends controller{
         foreach ($produto as $key => $value) {
             $q115->$key = $value;
         }
-        $q115->str_planta = 1;
 
         foreach ($cliente as $key => $value) {
             $q115->$key = $value;
